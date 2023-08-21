@@ -9,6 +9,7 @@ public class PlayerPickup : MonoBehaviour
     [SerializeField] private Transform linkTarget;
     [SerializeField] private Transform lockTarget;
     [SerializeField] private float rayDistance;
+    [SerializeField] private float ScrollSensitivity = 3;
     private bool targetChanged = false;
     private Holdable target;
     private Holdable heldItem;
@@ -60,6 +61,14 @@ public class PlayerPickup : MonoBehaviour
         {
             TryPickup(target);
         }
+
+        if (heldItem != null
+            && heldItem.isLink) //linked held item
+        {
+            float scroll = Input.GetAxisRaw("Mouse ScrollWheel");
+            Quaternion addRoatation = Quaternion.Euler(scroll * ScrollSensitivity, 0, 0);
+            heldItem.additionalRotation = addRoatation;
+        }
     }
 
     private async Task<bool> TryPickup(Holdable holdable)
@@ -94,7 +103,9 @@ public class PlayerPickup : MonoBehaviour
 
     private void Link(Holdable holdable)
     {
+        holdable.gameObject.layer = 8; //no collisions
         holdable.SetPhysics(false);
+        holdable.LinkTo(linkTarget);
 
         heldItem = holdable;
     }
@@ -104,6 +115,7 @@ public class PlayerPickup : MonoBehaviour
         heldItem.gameObject.layer = 0; //reenable collisions
         heldItem.SetPhysics(true);
         heldItem.transform.parent = null;
+        heldItem.Unlink();
 
         heldItem = null;
     }
