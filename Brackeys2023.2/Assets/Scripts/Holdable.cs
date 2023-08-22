@@ -1,9 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Holdable : MonoBehaviour
+public class Holdable : Targetable
 {
     /// <summary>
     /// If true the object doesn't lock, instead it hovers in front of the player allowing manipulation
@@ -17,6 +18,9 @@ public class Holdable : MonoBehaviour
     [SerializeField] private Vector3 boundingBox;
     [HideInInspector] public Quaternion additionalRotation;
     private Quaternion lastTargetRotation;
+    [field: SerializeField] public string Identifier { get; private set; } //ex: vase, or floor tile
+    [field: SerializeField] public string AdditionalInfo { get; private set; } //ex: a glyph painted on a vase
+    public Action OnPickup = () => { }; //triggered when this object is picked up
 
     private void Start()
     {

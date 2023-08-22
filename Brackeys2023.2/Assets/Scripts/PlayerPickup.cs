@@ -11,7 +11,7 @@ public class PlayerPickup : MonoBehaviour
     [SerializeField] private float rayDistance;
     [SerializeField] private float scrollSensitivity = 3;
     private bool targetChanged = false;
-    private Holdable target;
+    private Targetable target;
     private Holdable heldItem;
 
     // Start is called before the first frame update
@@ -26,9 +26,9 @@ public class PlayerPickup : MonoBehaviour
         //calculate if target has changed
         Ray ray = new Ray(rayOrigin.position, rayOrigin.forward);
         RaycastHit hit;
-        Holdable newTarget;
+        Targetable newTarget;
         if (Physics.Raycast(ray, out hit, rayDistance)
-            && hit.collider.gameObject.TryGetComponent<Holdable>(out newTarget))
+            && hit.collider.gameObject.TryGetComponent<Targetable>(out newTarget))
         {
 
             if (target == null)
@@ -49,16 +49,32 @@ public class PlayerPickup : MonoBehaviour
             target = null;
         }
 
-        if (Input.GetKeyDown(KeyCode.E)
+        if (target != null
+            && target.GetType() == typeof(Slot) //place in slot
+            && Input.GetKeyDown(KeyCode.E)
+            && heldItem != null)
+        {
+            var slot = (Slot)target;
+            if (slot.IsEligible(heldItem))
+            {
+                var item = heldItem;
+                DropHeldItem();
+                slot.Place(item);
+            }
+        }
+
+        else if (target != null
+            && target.GetType() == typeof(Holdable) //pick up
+            && Input.GetKeyDown(KeyCode.E)
+            && target != null)
+        {
+            TryPickup((Holdable)target);
+        }
+
+        else if (Input.GetKeyDown(KeyCode.E) //drop
             && heldItem != null)
         {
             DropHeldItem();
-        }
-
-        if (Input.GetKeyDown(KeyCode.E)
-            && target != null)
-        {
-            TryPickup(target);
         }
 
 
@@ -79,11 +95,13 @@ public class PlayerPickup : MonoBehaviour
             if (holdable.isLink)
             {
                 Link(holdable);
+                holdable.OnPickup.Invoke();
                 return true;
             }
             else
             {
                 Lock(holdable);
+                holdable.OnPickup.Invoke();
                 return true;
             }
         }
