@@ -18,10 +18,6 @@ public class Holdable : Targetable
     [SerializeField] private Vector3 boundingBox;
     [HideInInspector] public Quaternion additionalRotation;
     private Quaternion lastTargetRotation;
-    private Transform target;
-    [SerializeField] private Vector3 boundingBox;
-    [HideInInspector] public Quaternion additionalRotation;
-    private Quaternion lastTargetRotation;
     [field: SerializeField] public string Identifier { get; private set; } //ex: vase, or floor tile
     [field: SerializeField] public string AdditionalInfo { get; private set; } //ex: a glyph painted on a vase
     public Action OnPickup = () => { }; //triggered when this object is picked up
