@@ -141,10 +141,12 @@ public class PlayerPickup : MonoBehaviour
 
     private void DropHeldItem()
     {
-        heldItem.gameObject.layer = 0; //reenable collisions
+        heldItem.transform.position = linkTarget.position;
+        heldItem.gameObject.layer = heldItem.defaultLayer; //reenable collisions
         heldItem.SetPhysics(true);
         heldItem.transform.parent = null;
         heldItem.Unlink();
+        heldItem.OnDrop.Invoke();
 
         heldItem = null;
     }
