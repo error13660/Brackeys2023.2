@@ -53,8 +53,10 @@ public class KinematicController : MonoBehaviour
         float mouseY = Input.GetAxisRaw("Mouse Y");
 
         transform.localRotation *= Quaternion.Euler(0, mouseX * mouseSensitivity, 0);
-        head.localRotation *= Quaternion.Euler(Mathf.Clamp(mouseY * mouseSensitivity, verticalLookMin, verticalLookMax) * -1,
-            0, 0);
+        head.localRotation *= Quaternion.Euler(mouseY * mouseSensitivity * -1, 0, 0);
+
+        //head.localRotation = Quaternion.Euler(
+           // Mathf.Clamp(head.localRotation.x, verticalLookMin, verticalLookMax), 0, 0);
     }
 
     private void FixedUpdate()

@@ -30,37 +30,32 @@ public class CrystalManager : MonoBehaviour
     public Crystal GetUpstreamFrom(Crystal crystal)
     {
         Crystal[] inLos = GetInLineOfSightFrom(crystal);
-        Crystal brightest = null;
+        Crystal brightest = crystal;
 
         for (int i = 0; i < inLos.Length; i++)
         {
-            if (brightest == null)
-            {
-                brightest = inLos[i];
-                continue;
-            }
 
             if (brightest.brightness < inLos[i].brightness)
             {
                 brightest = inLos[i];
             }
         }
+
+        if (brightest == crystal) return null;
         return brightest;
     }
 
     private Crystal[] GetInLineOfSightFrom(Crystal crystal)
     {
         List<Crystal> los = new List<Crystal>();
-        int layerMask = 1 << 9;
 
         for (int i = 0; i < activeCrystals.Count; i++)
         {
-            Vector3 delta = activeCrystals[i].transform.position - crystal.transform.position;
-            Ray ray = new Ray(crystal.transform.position,
-                delta.normalized);
-            bool isLos = !Physics.Raycast(ray, delta.magnitude, layerMask); //is there something between?
-
-            if (isLos) los.Add(activeCrystals[i]);
+            if (crystal.IsLineOfSight(activeCrystals[i])
+                && activeCrystals[i] != crystal
+                && !activeCrystals[i].IsHeld
+                && !crystal.IsHeld)
+                los.Add(activeCrystals[i]);
         }
         return los.ToArray();
     }

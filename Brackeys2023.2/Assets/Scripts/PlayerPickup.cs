@@ -141,10 +141,26 @@ public class PlayerPickup : MonoBehaviour
 
     private void DropHeldItem()
     {
-        heldItem.gameObject.layer = 0; //reenable collisions
+        Vector3 dropPosition;
+        RaycastHit hit;
+        Vector3 toLinkTarget = linkTarget.position - lockTarget.position;
+        Ray ray = new Ray(lockTarget.position, toLinkTarget.normalized);
+        int layermask = ~(1 << 9);
+        if (Physics.Raycast(ray, out hit, toLinkTarget.magnitude, layermask))
+        {
+            dropPosition = hit.point;
+        }
+        else
+        {
+            dropPosition = linkTarget.position;
+        }
+
+        heldItem.transform.position = dropPosition;
+        heldItem.gameObject.layer = heldItem.defaultLayer; //reenable collisions
         heldItem.SetPhysics(true);
         heldItem.transform.parent = null;
         heldItem.Unlink();
+        heldItem.OnDrop.Invoke();
 
         heldItem = null;
     }

@@ -21,12 +21,16 @@ public class Holdable : Targetable
     [field: SerializeField] public string Identifier { get; private set; } //ex: vase, or floor tile
     [field: SerializeField] public string AdditionalInfo { get; private set; } //ex: a glyph painted on a vase
     public Action OnPickup = () => { }; //triggered when this object is picked up
+    public Action OnDrop = () => { };
+
+    [HideInInspector]public int defaultLayer = 0;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.isKinematic = !isPhysicsEnabledByDefault;
         rb.mass = mass;
+        defaultLayer = gameObject.layer;
     }
 
     public void SetPhysics(bool enable)
