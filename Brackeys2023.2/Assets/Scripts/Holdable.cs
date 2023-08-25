@@ -23,14 +23,18 @@ public class Holdable : Targetable
     public Action OnPickup = () => { }; //triggered when this object is picked up
     public Action OnDrop = () => { };
 
-    [HideInInspector]public int defaultLayer = 0;
+    [HideInInspector] public int defaultLayer = 0;
+    [SerializeField] private bool isSnapToGround;
+    [SerializeField] private Sprite pickUpIcon;
+    [SerializeField] private Sprite pryIcon;
 
-    private void Start()
+    protected virtual void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.isKinematic = !isPhysicsEnabledByDefault;
         rb.mass = mass;
         defaultLayer = gameObject.layer;
+        OnDrop += OnDropped;
     }
 
     public void SetPhysics(bool enable)
@@ -38,7 +42,7 @@ public class Holdable : Targetable
         rb.isKinematic = !enable;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if (target == null) return;
 
@@ -68,5 +72,38 @@ public class Holdable : Targetable
     public void Unlink()
     {
         target = null;
+    }
+
+    private void OnDropped()
+    {
+        if (!isSnapToGround) return;
+
+        SetPhysics(false);
+
+        RaycastHit hit;
+        Ray ray = new Ray(transform.position, Vector3.down);
+
+        if (Physics.BoxCast(transform.position,
+            boundingBox / 2,
+            Vector3.down,
+            out hit,
+            transform.rotation
+            ))
+        {
+            transform.position = transform.position + Vector3.down * hit.distance;
+            transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
+        }
+    }
+
+    public Sprite GetIcon()
+    {
+        if (rb.isKinematic)
+        {
+            return pryIcon;
+        }
+        else
+        {
+            return pickUpIcon;
+        }
     }
 }

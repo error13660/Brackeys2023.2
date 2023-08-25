@@ -13,6 +13,7 @@ public class PlayerPickup : MonoBehaviour
     private bool targetChanged = false;
     private Targetable target;
     private Holdable heldItem;
+    [SerializeField] private UIManager uiManager;
 
     // Start is called before the first frame update
     void Start()
@@ -30,7 +31,6 @@ public class PlayerPickup : MonoBehaviour
         if (Physics.Raycast(ray, out hit, rayDistance)
             && hit.collider.gameObject.TryGetComponent<Targetable>(out newTarget))
         {
-
             if (target == null)
             {
                 targetChanged = true;
@@ -54,6 +54,8 @@ public class PlayerPickup : MonoBehaviour
             && Input.GetKeyDown(KeyCode.E)
             && heldItem != null)
         {
+            uiManager.SetIcon(((Slot)target).icon);
+
             var slot = (Slot)target;
             if (slot.IsEligible(heldItem))
             {
@@ -65,19 +67,23 @@ public class PlayerPickup : MonoBehaviour
 
         else if (target != null
             && target.GetType() == typeof(Holdable) //pick up
-            && Input.GetKeyDown(KeyCode.E)
             && target != null)
         {
-            TryPickup((Holdable)target);
+            uiManager.SetIcon(((Holdable)target).GetIcon());
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                TryPickup((Holdable)target);
+            }
         }
 
         else if (Input.GetKeyDown(KeyCode.E) //drop
             && heldItem != null)
         {
             DropHeldItem();
+            return;
         }
 
-
+        //rotate held item
         if (heldItem != null
             && heldItem.isLink) //linked held item
         {
@@ -87,17 +93,29 @@ public class PlayerPickup : MonoBehaviour
         }
 
 
-        if (heldItem != null
-            && heldItem.isLink) //linked held item
+        //general interaction
+        ActionInteraction interaction;
+        if (Physics.Raycast(ray, out hit, rayDistance)
+           && hit.collider.gameObject.TryGetComponent<ActionInteraction>(out interaction))
         {
-            float scroll = Input.GetAxisRaw("Mouse ScrollWheel");
-            Quaternion addRoatation = Quaternion.AngleAxis(scroll * scrollSensitivity, linkTarget.right);
-            heldItem.additionalRotation = addRoatation;
+            uiManager.SetIcon(interaction.icon);
+            Debug.DrawRay(hit.point, hit.normal);
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                interaction.Interact(this.gameObject);
+            }
+            return;
+        }
+
+        if (target == null)
+        {
+            uiManager.SetIcon(null);
         }
     }
 
     private async Task<bool> TryPickup(Holdable holdable)
     {
+        uiManager.SetIconFill(0);
         bool isSuccess = await IsTargetHeldFor(holdable.PickupTime, KeyCode.E);
         if (isSuccess)
         {
@@ -114,6 +132,7 @@ public class PlayerPickup : MonoBehaviour
                 return true;
             }
         }
+        uiManager.SetIconFill(1);
         return false;
     }
 
@@ -187,6 +206,9 @@ public class PlayerPickup : MonoBehaviour
             && Input.GetKey(key))
         {
             await Task.Yield();
+            float t = (Time.time - t0) / seconds;
+            uiManager.SetIconFill(t);
+
             if (Time.time - t0 >= seconds) return true;
         }
         return false;

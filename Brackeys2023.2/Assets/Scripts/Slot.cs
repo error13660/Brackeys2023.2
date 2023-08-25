@@ -11,6 +11,7 @@ public class Slot : Targetable
     [SerializeField] private bool overrideRotation;
     [SerializeField] private Quaternion rotation;
     public Action OnPlaced = () => { };
+    public Sprite icon;
 
     public bool IsEligible(Holdable holdable)
     {

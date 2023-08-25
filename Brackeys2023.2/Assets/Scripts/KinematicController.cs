@@ -35,6 +35,10 @@ public class KinematicController : MonoBehaviour
 
     void Update()
     {
+        //check for teleport and don't overrie it
+        Vector3 delta = transform.position - lastPosition;
+        if (delta.magnitude > 1) return;
+
         //get input
         Vector3 movementVector = new Vector3(
             Input.GetAxisRaw("Horizontal"),
