@@ -22,7 +22,6 @@ public class Holdable : Targetable
     [field: SerializeField] public string AdditionalInfo { get; private set; } //ex: a glyph painted on a vase
     public Action OnPickup = () => { }; //triggered when this object is picked up
     public Action OnDrop = () => { };
-
     [HideInInspector] public int defaultLayer = 0;
     [SerializeField] private bool isSnapToGround;
     [SerializeField] private Sprite pickUpIcon;
@@ -34,7 +33,6 @@ public class Holdable : Targetable
         rb.isKinematic = !isPhysicsEnabledByDefault;
         rb.mass = mass;
         defaultLayer = gameObject.layer;
-        OnDrop += OnDropped;
     }
 
     public void SetPhysics(bool enable)
