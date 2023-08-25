@@ -10,8 +10,7 @@ public class Slot : Targetable
     [SerializeField] private Transform placedPosition;
     [SerializeField] private bool overrideRotation;
     [SerializeField] private Quaternion rotation;
-    public Action OnPlaced = () => { };
-    public Action OnActivated = () => { };
+    public Action<string> OnPlaced = (string addInfo) => { };
     public Sprite icon;
 
     public bool IsEligible(Holdable holdable)
@@ -31,7 +30,7 @@ public class Slot : Targetable
         {
             holdable.transform.rotation = rotation;
         }
-        OnPlaced.Invoke();
+        OnPlaced.Invoke(holdable.AdditionalInfo);
     }
 
     public string LookatMessage()

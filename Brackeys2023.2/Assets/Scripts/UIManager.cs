@@ -4,6 +4,21 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
+    public static UIManager Instance;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);
+            return;
+        }
+    }
+
 #nullable enable
     /// <summary>
     /// Sets the icon in the middle of the screen
@@ -15,6 +30,11 @@ public class UIManager : MonoBehaviour
 #nullable disable
 
     public void SetIconFill(float f)
+    {
+
+    }
+
+    public void DisplayText(string text)
     {
 
     }
