@@ -33,6 +33,7 @@ public class Holdable : Targetable
         rb.isKinematic = !isPhysicsEnabledByDefault;
         rb.mass = mass;
         defaultLayer = gameObject.layer;
+        OnDrop += OnDropped;
     }
 
     public void SetPhysics(bool enable)
