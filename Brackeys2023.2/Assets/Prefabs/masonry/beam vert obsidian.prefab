@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4722021412944722830}
   - component: {fileID: 4293948422076619874}
   - component: {fileID: 2398456790057901653}
+  - component: {fileID: 2664348289167342813}
   m_Layer: 0
   m_Name: beam vert obsidian
   m_TagString: Untagged
@@ -83,3 +84,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &2664348289167342813
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8121596037986513348}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.0000002, y: 1.9999999, z: 1.9999998}
+  m_Center: {x: 0, y: 0, z: 0}

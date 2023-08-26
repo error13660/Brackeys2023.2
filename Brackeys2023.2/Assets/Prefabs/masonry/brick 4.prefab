@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5336309455787147111}
   - component: {fileID: 7055349937119204560}
   - component: {fileID: 5109334162086676468}
+  - component: {fileID: 6221055684871299795}
   m_Layer: 0
   m_Name: brick 4
   m_TagString: Untagged
@@ -83,3 +84,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &6221055684871299795
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2463915853159178924}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.7471838, y: 0.37323686, z: 0.37323686}
+  m_Center: {x: 0, y: 0, z: 0}
