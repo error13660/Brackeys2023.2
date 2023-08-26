@@ -19,7 +19,6 @@ public class KinematicController : MonoBehaviour
     [Header("Mouse")]
     [SerializeField] private float mouseSensitivity;
     [SerializeField] private Transform head;
-    [SerializeField] private float verticalLookMin;
     [SerializeField] private float verticalLookMax;
 
     void Start()
@@ -56,11 +55,17 @@ public class KinematicController : MonoBehaviour
         float mouseX = Input.GetAxisRaw("Mouse X");
         float mouseY = Input.GetAxisRaw("Mouse Y");
 
-        transform.localRotation *= Quaternion.Euler(0, mouseX * mouseSensitivity, 0);
-        head.localRotation *= Quaternion.Euler(mouseY * mouseSensitivity * -1, 0, 0);
 
-        //head.localRotation = Quaternion.Euler(
-           // Mathf.Clamp(head.localRotation.x, verticalLookMin, verticalLookMax), 0, 0);
+        transform.localRotation *= Quaternion.Euler(0, mouseX * mouseSensitivity, 0);
+        //head.localRotation *= Quaternion.Euler(mouseY * mouseSensitivity * -1, 0, 0);
+        //Debug.Log(head.localRotation.eulerAngles.x);
+
+        Quaternion newRotation = head.localRotation * Quaternion.Euler(mouseY * mouseSensitivity * -1, 0, 0);
+        if (Quaternion.Angle(newRotation, Quaternion.LookRotation(Vector3.forward)) <= verticalLookMax)
+        {
+            //Debug.Log(Quaternion.Angle(newRotation, Quaternion.LookRotation(Vector3.forward)));
+            head.localRotation = newRotation;
+        }
     }
 
     private void FixedUpdate()

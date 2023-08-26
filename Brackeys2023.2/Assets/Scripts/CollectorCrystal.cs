@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class CollectorCrystal : Crystal
 {
+    private void Awake()
+    {
+        emmitLight = false;
+    }
+
     protected override float GetBrightness(Crystal upstream)
     {
         if (CheckForSky())

@@ -95,7 +95,7 @@ public class PlayerPickup : MonoBehaviour
 
         //general interaction
         ActionInteraction interaction;
-        if (Physics.Raycast(ray, out hit, rayDistance)
+        if (Physics.Raycast(ray, out hit, 4)
            && hit.collider.gameObject.TryGetComponent<ActionInteraction>(out interaction))
         {
             uiManager.SetIcon(interaction.icon);
