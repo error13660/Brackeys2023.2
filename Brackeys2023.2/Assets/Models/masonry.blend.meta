@@ -3,7 +3,27 @@ guid: ed516cf3b1a9302458f961f80711d303
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: from prop atlas
+    second: {fileID: 2100000, guid: 1014289dd64ddc54b8ba9f41e0ea0f7e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: from stone atlas
+    second: {fileID: 2100000, guid: 64f9820add4672d48a0e831b317eef62, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: glyps
+    second: {fileID: 2100000, guid: b2180b9c64c622c4cae56c95278cf137, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: symbols
+    second: {fileID: 2100000, guid: a61d849b05a244948a69adeaa946a817, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

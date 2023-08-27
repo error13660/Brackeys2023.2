@@ -6,6 +6,7 @@ public class CrystalManager : MonoBehaviour
 {
     public static CrystalManager Instance;
     private List<Crystal> activeCrystals;
+    [SerializeField] private Transform[] skyAnchors;
 
     private void Awake()
     {
@@ -45,7 +46,7 @@ public class CrystalManager : MonoBehaviour
         return brightest;
     }
 
-    private Crystal[] GetInLineOfSightFrom(Crystal crystal)
+    public Crystal[] GetInLineOfSightFrom(Crystal crystal)
     {
         List<Crystal> los = new List<Crystal>();
 
@@ -58,5 +59,42 @@ public class CrystalManager : MonoBehaviour
                 los.Add(activeCrystals[i]);
         }
         return los.ToArray();
+    }
+
+    public Crystal GetClosest(Vector3 position)
+    {
+        Crystal crystal = null;
+
+        for (int i = 0; i < activeCrystals.Count; i++)
+        {
+            if (crystal == null)
+            {
+                crystal = activeCrystals[i];
+                continue;
+            }
+
+            if ((position - activeCrystals[i].transform.position).magnitude < //is closer
+                (position - crystal.transform.position).magnitude)
+            {
+                crystal = activeCrystals[i];
+            }
+        }
+        return crystal;
+    }
+
+    public Vector3 GetClosestSkyAnchor(Vector3 position)
+    {
+
+        Vector3 closest = skyAnchors[0].position;
+
+        for (int i = 1; i < skyAnchors.Length; i++)
+        {
+            if ((position - skyAnchors[i].position).magnitude < //is closer
+                (position - closest).magnitude)
+            {
+                closest = skyAnchors[i].position;
+            }
+        }
+        return closest;
     }
 }

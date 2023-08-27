@@ -8,7 +8,7 @@ using UnityEngine;
 public class Crystal : MonoBehaviour
 {
     private bool isActive;
-    [field: SerializeField] public float brightness { get; private set; } = 1;
+    [field: SerializeField] public float brightness { get; protected set; } = 1;
     private Holdable holdable;
     private Crystal upstream = null; //the crystal this one gets its light from
     [SerializeField] private float brightnessLoss = 0.05f;
@@ -31,7 +31,7 @@ public class Crystal : MonoBehaviour
         light.intensity = 0;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if (upstream != null)
         {

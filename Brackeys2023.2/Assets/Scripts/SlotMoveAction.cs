@@ -5,13 +5,11 @@ using UnityEngine;
 public class SlotMoveAction : SlotAction
 {
     [SerializeField] private Transform moveEnd;
-    private Vector3 moveStart;
     [SerializeField] private float moveTime = 2f;
 
     protected override void Start()
     {
         base.Start();
-        moveStart = transform.position;
     }
 
     protected override void OnAction()
@@ -23,6 +21,7 @@ public class SlotMoveAction : SlotAction
     {
         float startTime = Time.time;
         Vector3 moveEnd = this.moveEnd.position;
+        Vector3 moveStart = transform.position;
         float t = 0;
 
         while (t <= 1)

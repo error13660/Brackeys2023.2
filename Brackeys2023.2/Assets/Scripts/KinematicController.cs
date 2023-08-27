@@ -5,6 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(CapsuleCollider))]
 public class KinematicController : MonoBehaviour
 {
+    public static bool isPaused = false;
+
     private float radius;
     private float height;
     [SerializeField] private float velocity = 0.5f;
@@ -34,6 +36,8 @@ public class KinematicController : MonoBehaviour
 
     void Update()
     {
+        if (isPaused) return;
+
         //check for teleport and don't overrie it
         Vector3 delta = transform.position - lastPosition;
         if (delta.magnitude > 1) return;
@@ -94,7 +98,9 @@ public class KinematicController : MonoBehaviour
             radius,
             velocity.normalized,
             out hit,
-            dist
+            dist,
+            ~0,
+            QueryTriggerInteraction.Ignore
             ))
         {
             Vector3 snapToSurface = velocity.normalized * (hit.distance - skinWidth);

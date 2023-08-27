@@ -27,8 +27,9 @@ public class PlayerPickup : MonoBehaviour
         //calculate if target has changed
         Ray ray = new Ray(rayOrigin.position, rayOrigin.forward);
         RaycastHit hit;
+        int layerMask = ~(1 << 8);
         Targetable newTarget;
-        if (Physics.Raycast(ray, out hit, rayDistance)
+        if (Physics.Raycast(ray, out hit, rayDistance, layerMask)
             && hit.collider.gameObject.TryGetComponent<Targetable>(out newTarget))
         {
             if (target == null)
@@ -51,17 +52,18 @@ public class PlayerPickup : MonoBehaviour
 
         if (target != null
             && target.GetType() == typeof(Slot) //place in slot
-            && Input.GetKeyDown(KeyCode.E)
             && heldItem != null)
         {
             uiManager.SetIcon(((Slot)target).icon);
-
-            var slot = (Slot)target;
-            if (slot.IsEligible(heldItem))
+            if (Input.GetKeyDown(KeyCode.E))
             {
-                var item = heldItem;
-                DropHeldItem();
-                slot.Place(item);
+                var slot = (Slot)target;
+                if (slot.IsEligible(heldItem))
+                {
+                    var item = heldItem;
+                    DropHeldItem();
+                    slot.Place(item);
+                }
             }
         }
 
@@ -95,7 +97,7 @@ public class PlayerPickup : MonoBehaviour
 
         //general interaction
         ActionInteraction interaction;
-        if (Physics.Raycast(ray, out hit, 4)
+        if (Physics.Raycast(ray, out hit, 4, layerMask)
            && hit.collider.gameObject.TryGetComponent<ActionInteraction>(out interaction))
         {
             uiManager.SetIcon(interaction.icon);
@@ -140,7 +142,7 @@ public class PlayerPickup : MonoBehaviour
     {
         holdable.gameObject.layer = 8; //no collisions
         holdable.transform.position = lockTarget.position;
-        holdable.transform.rotation = lockTarget.transform.rotation;
+        //holdable.transform.rotation = lockTarget.transform.rotation;
         holdable.transform.parent = lockTarget;
         holdable.SetPhysics(false);
 
